@@ -5,6 +5,10 @@ class Note:
     def __init__(self, note: int):
         self.octave = note // 12
 
+    @staticmethod
+    def create_from_octave(octave: int):
+        return Note(octave * 12)
+
     def __repr__(self):
         return f'Note {self.__class__.__name__.replace("Sharp", "#")} of {self.octave}th octave'
 
@@ -17,7 +21,7 @@ class Note:
     @classmethod
     def get_note_from_height(cls, note: int):
         note_types = [C, CSharp, D, DSharp, E, F, FSharp, G, GSharp, A, ASharp, B]
-        return note_types[note % 12](note)
+        return note_types[note % len(note_types)](note)
 
 
 class C(Note):
@@ -86,25 +90,3 @@ class Rest(Note):
 
 
 notes_list = [C, CSharp, D, DSharp, E, F, FSharp, G, GSharp, A, ASharp, B]
-major_scheme = [0, 2, 4, 5, 7, 9, 11]
-minor_scheme = [0, 2, 3, 5, 7, 8, 10]
-
-
-def get_major_scale(keynote_cls: Type[Note]) -> list[Type[Note]]:
-    keynote_index = notes_list.index(keynote_cls)
-    scheme = [(index + keynote_index) % len(notes_list) for index in major_scheme]
-    return [notes_list[index] for index in scheme]
-
-
-def get_minor_scale(keynote_cls: Type[Note]) -> list[Type[Note]]:
-    keynote_index = notes_list.index(keynote_cls)
-    scheme = [(index + keynote_index) % len(notes_list) for index in minor_scheme]
-    return [notes_list[index] for index in scheme]
-
-
-def get_parallel_minor_tonic(keynote_cls: Type[Note]) -> Type[Note]:
-    return notes_list[(major_scheme[5] + notes_list.index(keynote_cls)) % len(notes_list)]
-
-
-def get_parallel_major_tonic(keynote_cls: Type[Note]) -> Type[Note]:
-    return notes_list[(minor_scheme[2] + notes_list.index(keynote_cls)) % len(notes_list)]

@@ -1,7 +1,7 @@
 from typing import Type
 
 import Notes
-from Chords import Chords
+import Chords
 
 
 class Scale:
@@ -24,6 +24,8 @@ class Scale:
 
 class MajorScale(Scale):
     scheme = [0, 2, 4, 5, 7, 9, 11]
+    applicable_chords = [Chords.MajorChord, Chords.MinorChord, Chords.MinorChord, Chords.MajorChord,
+                         Chords.MajorChord, Chords.MinorChord, Chords.DiminishedChord]
 
     def __init__(self, keynote: Notes.Note | Type[Notes.Note]):
         super(MajorScale, self).__init__()
@@ -44,6 +46,8 @@ class MajorScale(Scale):
 
 class MinorScale(Scale):
     scheme = [0, 2, 3, 5, 7, 8, 10]
+    applicable_chords = [Chords.MinorChord, Chords.DiminishedChord, Chords.MajorChord, Chords.MinorChord,
+                         Chords.MinorChord, Chords.MajorChord, Chords.MajorChord]
 
     def __init__(self, keynote: Notes.Note | Type[Notes.Note]):
         super(MinorScale, self).__init__()
