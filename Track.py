@@ -35,7 +35,7 @@ class Track:
     def get_notes(self) -> list[Notes.Note]:
         return [note_stamped.note for note_stamped in self.notes_stamped]
 
-    def find_major_keynote(self):
+    def find_most_probable_keynotes(self):
         notes_list = self.get_notes()
         scales = [Scales.MajorScale(keynote) for keynote in Notes.notes_list]
         hits = [scale.count_hits(notes_list) for scale in scales]

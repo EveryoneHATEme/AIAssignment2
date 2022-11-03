@@ -9,12 +9,13 @@ class Chord:
     def __init__(self, keynote: Type[Notes.Note]):
         self.notes: list[Type[Notes.Note]]
 
-        keynote_index = Notes.notes_list.index(keynote)
-        current_scheme = [(keynote_index + i) % len(Notes.notes_list) for i in self.scheme]
-        self.notes = [Notes.notes_list[i] for i in current_scheme]
+        self.notes = [keynote.get_next(interval) for interval in self.scheme]
 
     def __repr__(self):
         return f'{self.__class__.__name__} of notes {", ".join([note.__name__ for note in self.notes])}'
+
+    def __iter__(self):
+        return iter(self.notes)
 
 
 class MajorChord(Chord):

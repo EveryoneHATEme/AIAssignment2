@@ -1,13 +1,20 @@
 from typing import Type
+from operator import itemgetter
 
 import Notes
 import Chords
 
 
 class Scale:
-    def __init__(self):
+    scheme: list[int]
+    applicable_chords: list[Type[Notes.Note]]
+
+    def __init__(self, keynote: Type[Notes.Note]):
         self.keynote: Type[Notes.Note]
         self.notes: list[Type[Notes.Note]] = []
+
+        self.keynote = keynote
+        self.notes = [keynote.get_next(interval) for interval in self.scheme]
 
     def contains(self, note: Notes.Note | Type[Notes.Note]) -> bool:
         if isinstance(note, Notes.Note):
@@ -21,27 +28,21 @@ class Scale:
     def get_parallel_scale(self):
         return None
 
+    @staticmethod
+    def get_most_probable_scales(track_notes: list[Type[Notes]], sample_size=4):
+        notes_list = Notes.Note.get_notes_list()
+        major_scales = [MajorScale(note) for note in notes_list]
+        hits = [scale.count_hits(track_notes) for scale in major_scales]
+        major_scales_hits_sorted = list(sorted(zip(major_scales, hits), key=itemgetter(1)))
+
 
 class MajorScale(Scale):
     scheme = [0, 2, 4, 5, 7, 9, 11]
     applicable_chords = [Chords.MajorChord, Chords.MinorChord, Chords.MinorChord, Chords.MajorChord,
                          Chords.MajorChord, Chords.MinorChord, Chords.DiminishedChord]
 
-    def __init__(self, keynote: Notes.Note | Type[Notes.Note]):
-        super(MajorScale, self).__init__()
-        if isinstance(keynote, Notes.Note):
-            self.keynote = keynote.__class__
-        else:
-            self.keynote = keynote
-        keynote_index = Notes.notes_list.index(self.keynote)
-        current_scheme = [(index + keynote_index) % len(Notes.notes_list) for index in self.scheme]
-
-        self.notes = [Notes.notes_list[index] for index in current_scheme]
-
     def get_parallel_scale(self):
-        return MinorScale(
-            Notes.notes_list[(self.scheme[-2] + Notes.notes_list.index(self.keynote)) % len(Notes.notes_list)]
-        )
+        return MinorScale(self.keynote.get_next(self.scheme[5]))
 
 
 class MinorScale(Scale):
@@ -49,18 +50,5 @@ class MinorScale(Scale):
     applicable_chords = [Chords.MinorChord, Chords.DiminishedChord, Chords.MajorChord, Chords.MinorChord,
                          Chords.MinorChord, Chords.MajorChord, Chords.MajorChord]
 
-    def __init__(self, keynote: Notes.Note | Type[Notes.Note]):
-        super(MinorScale, self).__init__()
-        if isinstance(keynote, Notes.Note):
-            self.keynote = keynote.__class__
-        else:
-            self.keynote = keynote
-        keynote_index = Notes.notes_list.index(self.keynote)
-        current_scheme = [(index + keynote_index) % len(Notes.notes_list) for index in self.scheme]
-
-        self.notes = [Notes.notes_list[index] for index in current_scheme]
-
     def get_parallel_scale(self):
-        return MajorScale(
-            Notes.notes_list[(self.scheme[2] + Notes.notes_list.index(self.keynote)) % len(Notes.notes_list)]
-        )
+        return MinorScale(self.keynote.get_next(self.scheme[2]))

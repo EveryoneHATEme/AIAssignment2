@@ -19,9 +19,26 @@ class Note:
         return hash(f'{self.__class__}{self.octave}')
 
     @classmethod
+    def get_notes_list(cls):
+        return cls.__subclasses__()
+
+    @classmethod
     def get_note_from_height(cls, note: int):
-        note_types = [C, CSharp, D, DSharp, E, F, FSharp, G, GSharp, A, ASharp, B]
-        return note_types[note % len(note_types)](note)
+        notes_list = cls.__subclasses__()
+        return notes_list[note % len(notes_list)](note)
+
+    @staticmethod
+    def get_interval(first, second):
+        notes_list = Note.__subclasses__()
+        first_index = notes_list.index(first)
+        second_index = notes_list.index(second)
+        return abs(first_index - second_index)
+
+    @classmethod
+    def get_next(cls, interval: int):
+        notes_list = Note.__subclasses__()
+        note_index = notes_list.index(cls)
+        return notes_list[(note_index + interval) % len(notes_list)]
 
 
 class C(Note):
@@ -82,11 +99,3 @@ class ASharp(Note):
 class B(Note):
     def __init__(self, note: int):
         super(B, self).__init__(note)
-
-
-class Rest(Note):
-    def __init__(self):
-        super(Rest, self).__init__(0)
-
-
-notes_list = [C, CSharp, D, DSharp, E, F, FSharp, G, GSharp, A, ASharp, B]
