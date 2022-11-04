@@ -1,6 +1,3 @@
-from typing import Type
-
-
 class Note:
     def __init__(self, height: int, start_time: int, finish_time: int):
         self.height = height

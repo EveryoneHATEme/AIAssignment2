@@ -1,3 +1,4 @@
+from operator import attrgetter
 import mido
 
 import Notes
@@ -12,6 +13,9 @@ class Track:
         self.ticks_per_beat = ticks_per_beat * self.time_signature.numerator
         self.total_time = 0
         self._parse_track(track)
+        self.most_probable_scales = Scales.Scale.get_most_probable_scales(
+            list(map(attrgetter('__class__'), self.notes))
+        )
 
     def get_beats(self) -> list[list[Notes.Note]]:
         beats_amount = self.total_time // self.ticks_per_beat
@@ -30,15 +34,6 @@ class Track:
                 beats[finish_beat_index].append(note)
 
         return beats
-
-    def get_notes(self) -> list[Notes.Note]:
-        return self.notes
-
-    # def find_most_probable_keynotes(self):
-    #     notes_list = self.get_notes()
-    #     scales = [Scales.MajorScale(keynote) for keynote in Notes.notes_list]
-    #     hits = [scale.count_hits(notes_list) for scale in scales]
-    #     print(hits)
 
     def _parse_track(self, track: mido.MidiTrack) -> None:
         playing_notes: dict[int, list[Notes.Note]] = dict()
