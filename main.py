@@ -18,8 +18,6 @@ def main():
 
     pprint(track.get_beats())
 
-    track.find_major_keynote()
-
 
 if __name__ == '__main__':
     main()

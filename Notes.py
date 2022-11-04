@@ -2,12 +2,11 @@ from typing import Type
 
 
 class Note:
-    def __init__(self, note: int):
-        self.octave = note // 12
-
-    @staticmethod
-    def create_from_octave(octave: int):
-        return Note(octave * 12)
+    def __init__(self, height: int, start_time: int, finish_time: int):
+        self.height = height
+        self.start_time = start_time
+        self.finish_time = finish_time
+        self.octave = height // 12
 
     def __repr__(self):
         return f'Note {self.__class__.__name__.replace("Sharp", "#")} of {self.octave}th octave'
@@ -23,9 +22,9 @@ class Note:
         return cls.__subclasses__()
 
     @classmethod
-    def get_note_from_height(cls, note: int):
+    def get_note_from_height(cls, note: int, start_time: int, finish_time: int):
         notes_list = cls.__subclasses__()
-        return notes_list[note % len(notes_list)](note)
+        return notes_list[note % len(notes_list)](note, start_time, finish_time)
 
     @staticmethod
     def get_interval(first, second):
@@ -42,60 +41,60 @@ class Note:
 
 
 class C(Note):
-    def __init__(self, note: int):
-        super(C, self).__init__(note)
+    def __init__(self, height: int, start_time: int, finish_time: int):
+        super(C, self).__init__(height, start_time, finish_time)
 
 
 class CSharp(Note):
-    def __init__(self, note: int):
-        super(CSharp, self).__init__(note)
+    def __init__(self, height: int, start_time: int, finish_time: int):
+        super(CSharp, self).__init__(height, start_time, finish_time)
 
 
 class D(Note):
-    def __init__(self, note: int):
-        super(D, self).__init__(note)
+    def __init__(self, height: int, start_time: int, finish_time: int):
+        super(D, self).__init__(height, start_time, finish_time)
 
 
 class DSharp(Note):
-    def __init__(self, note: int):
-        super(DSharp, self).__init__(note)
+    def __init__(self, height: int, start_time: int, finish_time: int):
+        super(DSharp, self).__init__(height, start_time, finish_time)
 
 
 class E(Note):
-    def __init__(self, note: int):
-        super(E, self).__init__(note)
+    def __init__(self, height: int, start_time: int, finish_time: int):
+        super(E, self).__init__(height, start_time, finish_time)
 
 
 class F(Note):
-    def __init__(self, note: int):
-        super(F, self).__init__(note)
+    def __init__(self, height: int, start_time: int, finish_time: int):
+        super(F, self).__init__(height, start_time, finish_time)
 
 
 class FSharp(Note):
-    def __init__(self, note: int):
-        super(FSharp, self).__init__(note)
+    def __init__(self, height: int, start_time: int, finish_time: int):
+        super(FSharp, self).__init__(height, start_time, finish_time)
 
 
 class G(Note):
-    def __init__(self, note: int):
-        super(G, self).__init__(note)
+    def __init__(self, height: int, start_time: int, finish_time: int):
+        super(G, self).__init__(height, start_time, finish_time)
 
 
 class GSharp(Note):
-    def __init__(self, note: int):
-        super(GSharp, self).__init__(note)
+    def __init__(self, height: int, start_time: int, finish_time: int):
+        super(GSharp, self).__init__(height, start_time, finish_time)
 
 
 class A(Note):
-    def __init__(self, note: int):
-        super(A, self).__init__(note)
+    def __init__(self, height: int, start_time: int, finish_time: int):
+        super(A, self).__init__(height, start_time, finish_time)
 
 
 class ASharp(Note):
-    def __init__(self, note: int):
-        super(ASharp, self).__init__(note)
+    def __init__(self, height: int, start_time: int, finish_time: int):
+        super(ASharp, self).__init__(height, start_time, finish_time)
 
 
 class B(Note):
-    def __init__(self, note: int):
-        super(B, self).__init__(note)
+    def __init__(self, height: int, start_time: int, finish_time: int):
+        super(B, self).__init__(height, start_time, finish_time)
