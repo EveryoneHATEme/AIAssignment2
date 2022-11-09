@@ -15,6 +15,11 @@ class Note:
         return hash(f'{self.__class__}{self.octave}')
 
     @classmethod
+    def get_note_key(cls, octave) -> int:
+        notes_list = Note.__subclasses__()
+        return octave * 12 + notes_list.index(cls)
+
+    @classmethod
     def get_notes_list(cls):
         return cls.__subclasses__()
 

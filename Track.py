@@ -10,17 +10,20 @@ class Track:
     def __init__(self, track: mido.MidiTrack, time_signature: TimeSignature, ticks_per_beat: int):
         self.notes: list[Notes.Note] = list()
         self.time_signature = TimeSignature(*time_signature)
-        self.ticks_per_beat = ticks_per_beat * self.time_signature.numerator
+        self.ticks_per_beat = ticks_per_beat * 2
         self.total_time = 0
         self._parse_track(track)
         self.most_probable_scales = Scales.Scale.get_most_probable_scales(
             list(map(attrgetter('__class__'), self.notes))
         )
 
-    def get_beats(self) -> list[list[Notes.Note]]:
+    def get_beats_count(self):
         beats_amount = self.total_time // self.ticks_per_beat
         additional_beat = self.total_time % self.ticks_per_beat != 0
-        beats: list[list[Notes.Note]] = [[] for _ in range(beats_amount + (1 if additional_beat else 0))]
+        return beats_amount + (1 if additional_beat else 0)
+
+    def get_beats(self) -> list[list[Notes.Note]]:
+        beats: list[list[Notes.Note]] = [[] for _ in range(self.get_beats_count())]
 
         for note in self.notes:
             # beat index on which the note starts to play

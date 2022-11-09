@@ -9,7 +9,7 @@ import Chords
 class Scale:
     __metaclass__ = abc.ABCMeta
     scheme: list[int]
-    applicable_chords: list[Type[Notes.Note]]
+    applicable_chords: list[Type[Chords.Chord]]
 
     def __init__(self, keynote: Type[Notes.Note]):
         self.keynote: Type[Notes.Note]
@@ -27,12 +27,17 @@ class Scale:
     def count_hits(self, notes: list[Type[Notes.Note]]) -> int:
         return sum(map(self.contains, notes))
 
+    def get_chord_from(self, degree: int):
+        chord_type = self.applicable_chords[degree]
+        chord_keynote = self.keynote.get_next(self.scheme[degree])
+        return chord_type(chord_keynote)
+
     @abc.abstractmethod
     def get_parallel_scale(self):
         return
 
     @staticmethod
-    def get_most_probable_scales(track_notes: list[Type[Notes.Note]], sample_size: int = 4):
+    def get_most_probable_scales(track_notes: list[Type[Notes.Note]], sample_size: int = 4) -> list:
         notes_list = Notes.Note.get_notes_list()
         major_scales = [MajorScale(note) for note in notes_list]
         hits = [scale.count_hits(track_notes) for scale in major_scales]
